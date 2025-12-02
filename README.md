@@ -6,4 +6,4 @@ Task:
 3. UI hiện số mạng, coin
 4. Màn hình game over, winner
 5. Menu start
-6*. Report
+6. Report ***
