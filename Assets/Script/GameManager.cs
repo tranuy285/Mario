@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +8,7 @@ public class GameManager : MonoBehaviour
     public int world { get; private set; } // Biến lưu trữ thế giới hiện tại
     public int stage { get; private set; } // Biến lưu trữ màn chơi hiện tại
     public int lives { get; private set; } // Biến lưu trữ số mạng của người chơi
+    public int coins { get; private set; } // Biến lưu trữ số coin của người chơi
 
     private void Awake()
     {
@@ -34,6 +36,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // Khởi tạo các thành phần cần thiết khi trò chơi bắt đầu
+        Application.targetFrameRate = 60;
         NewGame(); // Bắt đầu trò chơi mới
     }
 
@@ -41,16 +44,21 @@ public class GameManager : MonoBehaviour
     {
         // Thiết lập trạng thái ban đầu cho trò chơi mới
         lives = 3; // bắt đầu với 3 mạng
+        coins = 0; // bắt đầu với 0 coin
+
         LoadStage(1, 1); // load màn chơi đầu tiên
     }
 
     // Hàm load màn chơi 
-    private void LoadStage(int world, int stage)
+    public void LoadStage(int world, int stage)
     {
         this.world = world;
         this.stage = stage;
         // Thêm mã để tải cảnh dựa trên world và stage
         SceneManager.LoadScene($"{world}.{stage}");
+        
+        // // Cập nhật UI sau khi load scene
+        // Invoke(nameof(UpdateUI), 0.1f);
     }
 
     // Hàm load màn tiếp theo (thiết kế tạm thời cho world 1 có 3 stage. Nếu chỉ có 1 stage thì bỏ hàm này)
@@ -61,7 +69,7 @@ public class GameManager : MonoBehaviour
             LoadStage(world, stage + 1);
         } else if (world == 1 && stage == 3)
         {
-            SceneManager.LoadScene("Win!");
+            SceneManager.LoadScene("Winner");
         }
     }
 
@@ -75,6 +83,13 @@ public class GameManager : MonoBehaviour
     public void LevelReset()
     {
         lives--;
+        
+        // // Cập nhật UI
+        // if (UIManager.Instance != null)
+        // {
+        //     UIManager.Instance.UpdateLives(lives);
+        // }
+
         if (lives <= 0)
         {
             GameOver();
@@ -85,9 +100,47 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Hàm helper để cập nhật UI
+    private void UpdateUI()
+    {
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateUI();
+        }
+    }
+
     public void GameOver()
     {
-        //SceneManager.LoadScene("GameOver");
-        NewGame();
+        SceneManager.LoadScene("GameOver");
+    }
+
+    // Hàm thêm coin và xử lý khi đủ 100 coin sẽ cộng thêm mạng
+    public void AddCoin()
+    {
+        coins++;
+
+        // // Cập nhật UI
+        // if (UIManager.Instance != null)
+        // {
+        //     UIManager.Instance.UpdateCoins(coins);
+        // }
+
+        if (coins == 100)
+        {
+            AddLife();
+            coins = 0;
+        }
+    }
+
+    // Hàm thêm mạng cho người chơi
+    public void AddLife()
+    {
+        lives++;
+        
+        // // Cập nhật UI
+        // if (UIManager.Instance != null)
+        // {
+        //     UIManager.Instance.UpdateLives(lives);
+        // }
     }
 }

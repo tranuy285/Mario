@@ -13,6 +13,10 @@ public class Koopa : MonoBehaviour
         {
             PlayerStatus player = collision.gameObject.GetComponent<PlayerStatus>();
 
+            if(player.starpower)
+            {
+                Hit();
+            }
             if (collision.transform.DotTest(transform, Vector2.down))
             {
                 ShellMode(); // Gọi hàm ShellMode để xử lý Koopa vào trạng thái vỏ rùa sau khi nhân vật nhảy lên đầu 
@@ -51,7 +55,16 @@ public class Koopa : MonoBehaviour
                 }
                 else
                 {
-                    other.gameObject.GetComponent<PlayerStatus>().Hit();
+                    PlayerStatus player = other.GetComponent<PlayerStatus>();
+
+                    if(player.starpower)
+                    {
+                        Hit();
+                    }
+                    else
+                    {
+                        player.Hit();
+                    }
                 }
             }
         }

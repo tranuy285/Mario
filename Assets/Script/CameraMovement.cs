@@ -5,6 +5,9 @@ public class CameraMovement : MonoBehaviour
     // Biến để tham chiếu đến Transform của nhân vật người chơi
     private Transform player;
 
+    public float height = 6.5f; // Chiều cao cố định của camera bên trên mặt đất
+    public float undergroundHeight = -10f; // Chiều cao của camera khi ở dưới lòng đất
+
     private void Awake()
     {
         // Tìm và gán Transform của nhân vật người chơi dựa trên thẻ "Player" với điều kiện chỉ có một nhân vật, nếu có 2 nhân vật trở nên thì lỗi
@@ -21,5 +24,12 @@ public class CameraMovement : MonoBehaviour
             cameraPosition.x = Mathf.Max(cameraPosition.x, player.position.x);
             transform.position = cameraPosition;
         }
+    }
+
+    public void SetUnderground(bool underground)
+    {
+        Vector3 cameraPosition = transform.position;
+        cameraPosition.y = underground ? undergroundHeight : height;
+        transform.position = cameraPosition;
     }
 }

@@ -9,8 +9,13 @@ public class Goomba : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             PlayerStatus player = collision.gameObject.GetComponent<PlayerStatus>();
+
+            if(player.starpower)
+            {
+                Hit();
+            }
             // Kiểm tra nếu nhân vật chạm Goomba từ trên xuống => nhảy lên đầu Goomba
-            if (collision.transform.DotTest(transform, Vector2.down))
+            else if (collision.transform.DotTest(transform, Vector2.down))
             {
                 Flat(); // Gọi hàm Flat để xử lý Goomba chết
             }
