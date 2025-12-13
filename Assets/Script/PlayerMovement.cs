@@ -4,6 +4,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private new Camera camera;     // Biến để tham chiếu đến Camera
     private new Rigidbody2D rigidbody; //Khai báo biến rigidbody2D để điều khiển vật lý của nhân vật, thêm new để tránh cảnh báo trùng tên
+    private new Collider2D collider; //Khai báo biến collider2D để kiểm tra va chạm của nhân vật, thêm new để tránh cảnh báo trùng tên
     private Vector2 velocity; //Biến lưu trữ thông tin di chuyển
     private float inputAxis; //Biến lưu trữ giá trị đầu vào từ bàn phím
 
@@ -26,9 +27,26 @@ public class PlayerMovement : MonoBehaviour
     {
         //Lấy thành phần Rigidbody2D gắn trên cùng GameObject
         rigidbody = GetComponent<Rigidbody2D>();
+        collider = GetComponent<Collider2D>();
     
         camera = Camera.main; //Lấy tham chiếu đến Camera chính trong cảnh
     }
+
+    private void OnDsable()
+    {
+        rigidbody.bodyType = RigidbodyType2D.Kinematic; //Đặt kiểu thân thể thành Kinematic khi vô hiệu hóa để tránh các tính toán vật lý không cần thiết
+        collider.enabled = false; //Vô hiệu hóa collider để tránh va chạm khi nhân vật bị vô hiệu hóa
+        velocity = Vector2.zero; //Đặt vận tốc về 0 khi nhân vật bị vô hiệu hóa
+        isJumping = false;
+    }
+
+    private void OnEnable()
+    {
+        rigidbody.bodyType = RigidbodyType2D.Dynamic; //Đặt kiểu thân thể thành Dynamic khi kích hoạt lại để cho phép các tính toán vật lý
+        collider.enabled = true; //Kích hoạt lại collider để cho phép va chạm khi nhân vật được kích hoạt lại
+        velocity = Vector2.zero; //Đặt vận tốc về 0 khi nhân vật được kích hoạt lại
+    }
+
     private void Update()
     {
         HorizontalMovement();
