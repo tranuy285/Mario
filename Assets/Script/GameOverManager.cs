@@ -23,7 +23,7 @@ public class GameOverManager : MonoBehaviour
         // Hiển thị số coins thu thập được
         if (coinsText != null && GameManager.Instance != null)
         {
-            coinsText.text = $"● Coins Collected: {GameManager.Instance.coins}";
+            coinsText.text = $"[Coins Collected: {GameManager.Instance.coins}]";
         }
 
         // Hiển thị tổng thời gian đã chơi
