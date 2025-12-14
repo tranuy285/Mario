@@ -97,6 +97,11 @@ public class Koopa : MonoBehaviour
     {
         GetComponent<AnimatedSprite>().enabled = false;
         GetComponent<DeathAnimation>().enabled = true;
+        
+        // Thêm 2 coins khi kill Koopa
+        GameManager.Instance?.AddCoin();
+        GameManager.Instance?.AddCoin();
+        
         Destroy(gameObject, 3f);
     }
 
