@@ -7,9 +7,9 @@ public class WinnerManager : MonoBehaviour
 {
     [Header("UI References")]
     public TextMeshProUGUI winnerText;
-    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI coinsText;
+    public TextMeshProUGUI timeText;
     public Button continueButton;
-    public Button mainMenuButton;
 
     private void Start()
     {
@@ -19,32 +19,30 @@ public class WinnerManager : MonoBehaviour
             winnerText.text = "CONGRATULATIONS!";
         }
 
-        // Hiển thị điểm số (coins thu thập được)
-        if (scoreText != null && GameManager.Instance != null)
+        // Hiển thị số coins thu thập được
+        if (coinsText != null && GameManager.Instance != null)
         {
-            scoreText.text = $"Total Coins: {GameManager.Instance.coins}";
+            coinsText.text = $"● Coins Collected: {GameManager.Instance.coins}";
         }
 
-        // Gắn sự kiện cho các nút
+        // Hiển thị tổng thời gian đã chơi
+        if (timeText != null && GameManager.Instance != null)
+        {
+            int minutes = Mathf.FloorToInt(GameManager.Instance.totalTimePlayed / 60f);
+            int seconds = Mathf.FloorToInt(GameManager.Instance.totalTimePlayed % 60f);
+            timeText.text = $"[Total Time: {minutes:D2}:{seconds:D2}]";
+        }
+
+        // Gắn sự kiện cho nút Continue
         if (continueButton != null)
         {
             continueButton.onClick.AddListener(Continue);
-        }
-
-        if (mainMenuButton != null)
-        {
-            mainMenuButton.onClick.AddListener(BackToMainMenu);
         }
     }
 
     private void Continue()
     {
-        // Có thể load world tiếp theo hoặc về menu
-        BackToMainMenu();
-    }
-
-    private void BackToMainMenu()
-    {
+        // Về main menu và destroy GameManager để reset toàn bộ
         if (GameManager.Instance != null)
         {
             Destroy(GameManager.Instance.gameObject);

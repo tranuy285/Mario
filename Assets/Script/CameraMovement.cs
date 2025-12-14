@@ -5,7 +5,7 @@ public class CameraMovement : MonoBehaviour
     // Biến để tham chiếu đến Transform của nhân vật người chơi
     private Transform player;
 
-    public float height = 6.5f; // Chiều cao cố định của camera bên trên mặt đất
+    public float height = 7f; // Chiều cao cố định của camera bên trên mặt đất
     public float undergroundHeight = -10f; // Chiều cao của camera khi ở dưới lòng đất
 
     private void Awake()

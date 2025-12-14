@@ -11,24 +11,28 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI worldText;
     public TextMeshProUGUI timeText;
 
-    private int timeRemaining = 400;
+    private int timeRemaining = 120;
 
     private void Awake()
     {
-        if (Instance == null)
+        // UIManager mới mỗi scene
+        if (Instance != null)
         {
-            Instance = this;
+            Destroy(Instance.gameObject);
         }
-        else
-        {
-            Destroy(gameObject);
-        }
+        Instance = this;
     }
 
     private void Start()
     {
         UpdateUI();
-        InvokeRepeating(nameof(UpdateTimer), 1f, 1f); // Cập nhật timer mỗi giây
+        
+        // Reset timer về 120s mỗi khi load scene (kể cả respawn)
+        timeRemaining = 120;
+        UpdateTimeDisplay(timeRemaining);
+        
+        // Bắt đầu đếm ngược
+        InvokeRepeating(nameof(UpdateTimer), 1f, 1f);
     }
 
     private void OnDestroy()
@@ -55,7 +59,7 @@ public class UIManager : MonoBehaviour
     {
         if (livesText != null)
         {
-            livesText.text = $"x{lives}";
+            livesText.text = $"♥ x{lives}"; // Heart symbol (Unicode basic)
         }
     }
 
@@ -64,7 +68,7 @@ public class UIManager : MonoBehaviour
     {
         if (coinsText != null)
         {
-            coinsText.text = $"x{coins:D2}"; // Format 2 chữ số (01, 02, ..., 99)
+            coinsText.text = $"● x{coins:D3}"; // Circle cho coin - Format 3 chữ số (001, 002...)
         }
     }
 
@@ -83,10 +87,7 @@ public class UIManager : MonoBehaviour
         if (timeRemaining > 0)
         {
             timeRemaining--;
-            if (timeText != null)
-            {
-                timeText.text = timeRemaining.ToString("D3"); // Format 3 chữ số
-            }
+            UpdateTimeDisplay(timeRemaining);
 
             // Hết thời gian thì player chết
             if (timeRemaining == 0)
@@ -96,13 +97,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // Reset timer khi bắt đầu level mới
-    public void ResetTimer(int time = 400)
+    // Cập nhật hiển thị timer
+    private void UpdateTimeDisplay(int time)
     {
-        timeRemaining = time;
         if (timeText != null)
         {
-            timeText.text = timeRemaining.ToString("D3");
+            timeText.text = $"[{time:D3}s]";
         }
     }
 }
