@@ -42,6 +42,10 @@ public class Goomba : MonoBehaviour
         GetComponent<EntityMovement>().enabled = false; // Vô hiệu hóa script di chuyển
         GetComponent<AnimatedSprite>().enabled = false; // Vô hiệu hóa script AnimatedSprite để dừng hoạt ảnh
         GetComponent<SpriteRenderer>().sprite = diedSprite; // Thay đổi sprite thành sprite chết 
+        
+        // Thêm coin khi kill Goomba
+        GameManager.Instance?.AddCoin();
+        
         Destroy(gameObject, 0.5f); // Hủy đối tượng Goomba sau 0.5 giây
     }
 
@@ -51,6 +55,10 @@ public class Goomba : MonoBehaviour
         GetComponent<AnimatedSprite>().enabled = false;
         transform.eulerAngles = new Vector3(180.0f, 0.0f, 0.0f);
         GetComponent<DeathAnimation>().enabled = true;
+        
+        // Thêm coin khi kill Goomba bằng shell
+        GameManager.Instance?.AddCoin();
+        
         Destroy(gameObject, 3f);
     }
 }
