@@ -7,6 +7,8 @@ public class GameOverManager : MonoBehaviour
 {
     [Header("UI References")]
     public TextMeshProUGUI gameOverText;
+    public TextMeshProUGUI coinsText;
+    public TextMeshProUGUI timeText;
     public Button restartButton;
     public Button mainMenuButton;
 
@@ -16,6 +18,20 @@ public class GameOverManager : MonoBehaviour
         if (gameOverText != null)
         {
             gameOverText.text = "GAME OVER";
+        }
+
+        // Hiển thị số coins thu thập được
+        if (coinsText != null && GameManager.Instance != null)
+        {
+            coinsText.text = $"● Coins Collected: {GameManager.Instance.coins}";
+        }
+
+        // Hiển thị tổng thời gian đã chơi
+        if (timeText != null && GameManager.Instance != null)
+        {
+            int minutes = Mathf.FloorToInt(GameManager.Instance.totalTimePlayed / 60f);
+            int seconds = Mathf.FloorToInt(GameManager.Instance.totalTimePlayed % 60f);
+            timeText.text = $"[Total Time: {minutes:D2}:{seconds:D2}]";
         }
 
         // Gắn sự kiện cho các nút
@@ -28,28 +44,25 @@ public class GameOverManager : MonoBehaviour
         {
             mainMenuButton.onClick.AddListener(BackToMainMenu);
         }
-
-        // Tự động restart sau 5 giây nếu không có interaction
-        Invoke(nameof(Restart), 5f);
     }
 
     private void Restart()
     {
-        CancelInvoke(); // Hủy auto restart
         
         if (GameManager.Instance != null)
         {
-            // Reset game mới
-            Destroy(GameManager.Instance.gameObject);
+            // Restart game ngay lập tức từ màn 1.1
+            GameManager.Instance.RestartGame();
         }
-        
-        SceneManager.LoadScene("MainMenu");
+        else
+        {
+            // Nếu không có GameManager, load trực tiếp
+            SceneManager.LoadScene("1.1");
+        }
     }
 
     private void BackToMainMenu()
     {
-        CancelInvoke();
-        
         if (GameManager.Instance != null)
         {
             Destroy(GameManager.Instance.gameObject);

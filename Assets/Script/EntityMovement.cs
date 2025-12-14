@@ -18,7 +18,7 @@ public class EntityMovement : MonoBehaviour
         enabled = true;
     }
 
-     private void OnBecameInvisible()
+    private void OnBecameInvisible()
     {
         if(gameObject.layer == LayerMask.NameToLayer("Shell"))
             return;

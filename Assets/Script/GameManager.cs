@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public int stage { get; private set; } // Biến lưu trữ màn chơi hiện tại
     public int lives { get; private set; } // Biến lưu trữ số mạng của người chơi
     public int coins { get; private set; } // Biến lưu trữ số coin của người chơi
+    public float totalTimePlayed { get; private set; } // Tổng thời gian đã chơi (giây)
 
     private void Awake()
     {
@@ -21,6 +22,15 @@ public class GameManager : MonoBehaviour
         else
         {
             Destroy(gameObject); // Hủy bỏ các instance phụ
+        }
+    }
+
+    private void Update()
+    {
+        // Đếm thời gian khi đang chơi (không đếm trong menu hoặc game over/winner)
+        if (world > 0 && stage > 0)
+        {
+            totalTimePlayed += Time.deltaTime;
         }
     }
 
@@ -45,6 +55,7 @@ public class GameManager : MonoBehaviour
         // Thiết lập trạng thái ban đầu cho trò chơi mới
         lives = 3; // bắt đầu với 3 mạng
         coins = 0; // bắt đầu với 0 coin
+        totalTimePlayed = 0f; // reset thời gian
 
         LoadStage(1, 1); // load màn chơi đầu tiên
     }
@@ -57,20 +68,39 @@ public class GameManager : MonoBehaviour
         // Thêm mã để tải cảnh dựa trên world và stage
         SceneManager.LoadScene($"{world}.{stage}");
         
-        // // Cập nhật UI sau khi load scene
-        // Invoke(nameof(UpdateUI), 0.1f);
+        // Cập nhật UI sau khi load scene
+        Invoke(nameof(UpdateUI), 0.1f);
     }
 
-    // Hàm load màn tiếp theo (thiết kế tạm thời cho world 1 có 3 stage. Nếu chỉ có 1 stage thì bỏ hàm này)
+    // Hàm load màn tiếp theo
     public void LoadNextStage()
     {
-        if (world == 1 && stage < 3)
+        // Chuyển sang stage tiếp theo trong cùng world
+        if (stage < 3)
         {
             LoadStage(world, stage + 1);
-        } else if (world == 1 && stage == 3)
+        }
+        // Nếu đã hoàn thành stage 3, chuyển sang màn Winner
+        else if (stage == 3)
         {
+            world = 0; // Dừng đếm thời gian
+            stage = 0;
             SceneManager.LoadScene("Winner");
         }
+        // Nếu muốn thêm world 2, có thể mở rộng logic ở đây
+        // else if (world == 1 && stage == 3)
+        // {
+        //     LoadStage(2, 1); // Chuyển sang world 2
+        // }
+    }
+
+    // Hàm bắt đầu game mới (dùng cho restart từ game over)
+    public void RestartGame()
+    {
+        lives = 3;
+        coins = 0;
+        totalTimePlayed = 0f;
+        LoadStage(1, 1);
     }
 
     // Tạo độ trễ trước khi xử lý người chơi chết, tránh việc load lại màn chơi ngay lập tức
@@ -84,11 +114,11 @@ public class GameManager : MonoBehaviour
     {
         lives--;
         
-        // // Cập nhật UI
-        // if (UIManager.Instance != null)
-        // {
-        //     UIManager.Instance.UpdateLives(lives);
-        // }
+        // Cập nhật UI
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateLives(lives);
+        }
 
         if (lives <= 0)
         {
@@ -111,24 +141,20 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        world = 0; // Dừng đếm thời gian
+        stage = 0;
         SceneManager.LoadScene("GameOver");
     }
 
-    // Hàm thêm coin và xử lý khi đủ 100 coin sẽ cộng thêm mạng
+    // Hàm thêm coin
     public void AddCoin()
     {
         coins++;
 
-        // // Cập nhật UI
-        // if (UIManager.Instance != null)
-        // {
-        //     UIManager.Instance.UpdateCoins(coins);
-        // }
-
-        if (coins == 100)
+        // Cập nhật UI
+        if (UIManager.Instance != null)
         {
-            AddLife();
-            coins = 0;
+            UIManager.Instance.UpdateCoins(coins);
         }
     }
 
@@ -137,10 +163,10 @@ public class GameManager : MonoBehaviour
     {
         lives++;
         
-        // // Cập nhật UI
-        // if (UIManager.Instance != null)
-        // {
-        //     UIManager.Instance.UpdateLives(lives);
-        // }
+        // Cập nhật UI
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateLives(lives);
+        }
     }
 }

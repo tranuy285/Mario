@@ -7,8 +7,7 @@ public class FlagPole : MonoBehaviour
     public Transform poleBottom;
     public Transform castle;
     public float speed = 6f;
-    public int nextWorld = 1;
-    public int nextStage = 2;
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
@@ -31,7 +30,8 @@ public class FlagPole : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        GameManager.Instance.LoadStage(nextWorld, nextStage);
+        // Tự động load màn tiếp theo hoặc Winner
+        GameManager.Instance.LoadNextStage();
     }
 
     private IEnumerator MoveTo(Transform subject, Vector3 destination)
