@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6019469963770951005}
   - component: {fileID: 7635329293716964645}
   - component: {fileID: 246636773235906083}
+  - component: {fileID: 6277074003184063969}
   m_Layer: 7
   m_Name: Goomba
   m_TagString: Enemy
@@ -171,7 +172,7 @@ MonoBehaviour:
   sprites:
   - {fileID: 8278757702537296001, guid: 3df2df999ca04064b83111e0e00d9b93, type: 3}
   - {fileID: 1996474554486279749, guid: ff9cfc957e273eb4fad4bd441c8d3276, type: 3}
-  framerate: 0.25
+  framerate: 5
 --- !u!114 &6019469963770951005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c6f451d92a3804c83e574232d57ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  moveSpeed: 1
   direction: {x: -1, y: 0}
 --- !u!114 &7635329293716964645
 MonoBehaviour:
@@ -213,3 +214,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 8231465595177865147}
   deadSprite: {fileID: 0}
+--- !u!114 &6277074003184063969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2904756754643619233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b48fa41963c16ee49b0b47aa66faa2ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aggroRange: 5
+  chaseSpeed: 2
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 1
